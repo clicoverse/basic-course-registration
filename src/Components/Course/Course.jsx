@@ -1,9 +1,11 @@
 import { HiOutlineBookOpen } from "react-icons/hi";
 import { PiCurrencyDollarSimpleLight } from "react-icons/pi";
 import PropTypes from "prop-types";
+import { useState } from "react";
 
 const Course = ({ course, handleSelectedCourse }) => {
   const { image, title, description, time, price } = course;
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   // console.log(course);
   return (
     <div className="card w-80 bg-base-100 shadow-xl">
@@ -25,7 +27,8 @@ const Course = ({ course, handleSelectedCourse }) => {
         </div>
         <div className="card-actions">
           <button
-            onClick={() => handleSelectedCourse(course)}
+            onClick={() => handleSelectedCourse(course, setIsButtonDisabled)}
+            disabled={isButtonDisabled}
             className="bg-[#2F80ED] text-white btn w-full"
           >
             Select

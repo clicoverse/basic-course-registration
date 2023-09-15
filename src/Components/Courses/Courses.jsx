@@ -6,8 +6,10 @@ import Cart from "../Cart/Cart";
 const Courses = () => {
   const [courses, setCourses] = useState([]); //State Declearation
   const [selectedCourses, setSelectedCourses] = useState([]);
-  const [totalCreditHours, setTotalCreditHours] = useState(20);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [totalCreditHours, setTotalCreditHours] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [remaining, setRemaining] = useState(20);
 
   useEffect(() => {
     fetch("./data.json")
@@ -15,12 +17,30 @@ const Courses = () => {
       .then((data) => setCourses(data));
   }, []);
 
-  const handleSelectedCourse = (course) => {
-    setSelectedCourses([...selectedCourses, course]);
+  const handleSelectedCourse = (course, setIsButtonDisabled) => {
     // console.log(course);
+    // const serialNumber = selectedCourses.length + 1;
+    // console.log(serialNumber);
+    const isExist = selectedCourses.find((item) => item.id == course.id);
     let price = course.price;
-    selectedCourses.forEach((item) => (price += item.price));
-    setTotalPrice(price);
+    if (isExist) {
+      return alert("Alreday Purchased");
+    } else {
+      selectedCourses.forEach((item) => (price += item.price));
+    }
+    let time = course.time;
+    selectedCourses.forEach((item) => (time += item.time));
+    const totalRemaingHrs = 20 - time;
+
+    if (time > 20) {
+      return alert("Hrs Exost");
+    } else {
+      setTotalCreditHours(time);
+      setTotalPrice(price);
+      setRemaining(totalRemaingHrs);
+      setSelectedCourses([...selectedCourses, course]);
+    }
+    // setIsButtonDisabled(!isButtonDisabled);
   };
 
   return (
@@ -37,7 +57,13 @@ const Courses = () => {
         </div>
       </div>
       <div className="col-span-1">
-        <Cart selectedCourses={selectedCourses} totalPrice={totalPrice}></Cart>
+        <Cart
+          selectedCourses={selectedCourses}
+          totalCreditHours={totalCreditHours}
+          isButtonDisabled={isButtonDisabled}
+          remaining={remaining}
+          totalPrice={totalPrice}
+        ></Cart>
       </div>
     </div>
   );
