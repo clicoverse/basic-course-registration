@@ -12,7 +12,7 @@ const Cart = ({ selectedCourses, totalPrice, totalCreditHours, remaining }) => {
       <div>
         {selectedCourses.map((course) => (
           <div key={course.id} className="py-2 px-3">
-            <ol className="list-decimal list-inside">
+            <ol>
               <li>
                 {/* {`${course.serialNumber}: ${course.title}`} */}
                 {course.title}

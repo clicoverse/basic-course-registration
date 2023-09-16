@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import Course from "../Course/Course";
 import Cart from "../Cart/Cart";
+import Swal from "sweetalert2";
 
 const Courses = () => {
   const [courses, setCourses] = useState([]); //State Declearation
@@ -23,24 +24,42 @@ const Courses = () => {
     // console.log(serialNumber);
     const isExist = selectedCourses.find((item) => item.id == course.id);
     let price = course.price;
+    let time = course.time;
+
+    // if (isExist) {
+    // } else {
+    // }
+
+    // console.log(totalRemaingHrs);
+
     if (isExist) {
-      return alert("Alreday Purchased");
+      return Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "You have already purchsed this course!",
+      });
     } else {
       selectedCourses.forEach((item) => (price += item.price));
+      selectedCourses.forEach((item) => (time += item.time));
     }
-    let time = course.time;
-    selectedCourses.forEach((item) => (time += item.time));
     const totalRemaingHrs = 20 - time;
+    console.log("time is:", time);
+    console.log("remaing time:", totalRemaingHrs);
+    console.log("price is:", price);
 
     if (time > 20) {
-      return alert("Hrs Exost");
+      return Swal.fire({
+        icon: "warning",
+        title: "Sorry...",
+        text: "Total Hours Exost!",
+      });
     } else {
       setTotalCreditHours(time);
-      setTotalPrice(price);
       setRemaining(totalRemaingHrs);
+      setTotalPrice(price);
       setSelectedCourses([...selectedCourses, course]);
+      // setIsButtonDisabled(!isButtonDisabled);
     }
-    // setIsButtonDisabled(!isButtonDisabled);
   };
 
   return (
